@@ -33,6 +33,8 @@ sync() {
     fi
 
     #Export the manifest url
+    export ROOMs=https://raw.githubusercontent.com/ComicoTeam/android_local_manifests_asus/master/local_manifests/local_manifests.xml
+
     #Delete the existing manfiest
     rm -v $ROOMd/*.xml
 

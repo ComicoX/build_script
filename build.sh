@@ -20,7 +20,10 @@ setup() {
 
 # Function to Sync build
 sync() {
+    #Export the manifest path
     export ROOMd=~/havoc/.repo/local_manifests
+
+    #Check if it exists
     if 
         [ ! -d $ROOMd ];
 	        then
@@ -29,21 +32,42 @@ sync() {
         echo ' roomservice dir exists ' 
     fi
 
-    export ROOMs=https://raw.githubusercontent.com/ComicoTeam/android_local_manifests_I01WD/master/local_manifests/local_manifests.xml
+    #Export the manifest url
+    #Delete the existing manfiest
     rm -v $ROOMd/*.xml
+
+    #Download the new one
     wget -O $ROOMd/HAVOC.xml $ROOMs
+
+    #Start the sync
     repo sync -c -j16 --force-sync --no-clone-bundle --no-tags
+
+    #Reload the script at the end
 }
 
 # Function to BUILD ZENFONE 6 without gapps
 zen() {
+    #Announce the build
     echo 'Zenfone 6'
+
+    #Start the build
     brunch I01WD
+
+    #Cd to the build output
     cd $zenout
-    filenameZenG=$(basename *I01WD-Official*.zip)
-    mv $filenameZenG $OUT_DIR_COMMON_BASE
+    
+    #Get the file name
+    filenameZen=$(basename *I01WD-Official*.zip)
+
+    #Copy the file
+
+    #Make clean
     make clean
-    gdrive upload $filenameZenG
+
+    #Upload the zip
+    gdrive upload $filenameZen
+
+    #Exit the script
     exit 0
 }
 

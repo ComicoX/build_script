@@ -62,6 +62,7 @@ zen() {
     filenameZen=$(basename *I01WD-Official*.zip)
 
     #Copy the file
+    mv $filenameZen $OUT_DIR_COMMON_BASE/$filenameZen
 
     #Make clean
     make clean
@@ -81,7 +82,7 @@ zenGapps() {
     brunch I01WD
     cd $zenout
     filenameZenG=$(basename *I01WD-Official-GApps*.zip)
-    mv $filenameZenG $OUT_DIR_COMMON_BASE
+    mv $filenameZenG $OUT_DIR_COMMON_BASE/$filenameZenG
     make clean
     gdrive upload $filenameZenG
     exit 0
@@ -93,7 +94,7 @@ zenFull() {
     brunch I01WD
     cd $zenout
     filenameZen=$(basename *I01WD-Official*.zip)
-    mv $filenameZen $OUT_DIR_COMMON_BASE
+    mv $filenameZen $OUT_DIR_COMMON_BASE/$filenameZen
     make clean
     sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameZen'
     export WITH_GAPPS=true
@@ -101,7 +102,7 @@ zenFull() {
     brunch I01WD
     cd $zenout
     filenameZenG=$(basename *I01WD-Official-GApps*.zip)
-    mv $filenameZenG $OUT_DIR_COMMON_BASE
+    mv $filenameZenG $OUT_DIR_COMMON_BASE/$filenameZenG
     make clean
     sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameZenG'
     exit 0
@@ -114,8 +115,7 @@ rogGapps() {
     export TARGET_GAPPS_ARCH=arm64
     brunch I001D
     cd $rogout
-    filenameRogG=$(basename *I001D-Unofficial-GApps*.zip)
-    mv $filenameRogG $OUT_DIR_COMMON_BASE
+    mv $filenameRogG $OUT_DIR_COMMON_BASE/$filenameRogG
     make clean
     gdrive upload $filenameRogG
     exit 0

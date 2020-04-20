@@ -115,9 +115,30 @@ rogGapps() {
     export TARGET_GAPPS_ARCH=arm64
     brunch I001D
     cd $rogout
+    filenameRogG=$(basename *I001D-Official-GApps*.zip)
     mv $filenameRogG $OUT_DIR_COMMON_BASE/$filenameRogG
     make clean
     gdrive upload $filenameRogG
+    exit 0
+}
+
+# Function to BUILD RogPhone II without gapps then with gapps
+zenFull() {
+    echo 'Rog PHONE II FULL'
+    brunch I001D
+    cd $zenout
+    filenameRog=$(basename *I001D-Official*.zip)
+    mv $filenameRog $OUT_DIR_COMMON_BASE/$filenameRog
+    make clean
+    sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameRog'
+    export WITH_GAPPS=true
+    export TARGET_GAPPS_ARCH=arm64
+    brunch I001D
+    cd $zenout
+    filenameRogG=$(basename *I001D-Official-GApps*.zip)
+    mv $filenameRogG $OUT_DIR_COMMON_BASE/$filenameRogG
+    make clean
+    sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameRogG'
     exit 0
 }
 
@@ -132,21 +153,23 @@ show_menus() {
     echo "  2. Zenfone 6 GAPPS"
     echo "  3. Zenfone 6 FULL"
     echo "  4. ROG PHONE II GAPPS"
-    echo "  5. EXIT"
+    echo "  5. ROG PHONE II FULL"
+    echo "  6. EXIT"
     echo ""
 }
 
 # Function to read menu input selection and take a action
 read_options(){
     local choice
-    read -p "Enter choice [ 0 - 5 ] " choice
+    read -p "Enter choice [ 0 - 6 ] " choice
     case $choice in
     0) sync;;
     1) zen;;
     2) zenGapps;;
     3) zenFULL;;
     4) rogGapps;;
-    5) exit 0;;
+    5) rogFULL;;
+    6) exit 0;;
     *) echo -e "${RED}Error...${STD}" && sleep 2
     esac
 }

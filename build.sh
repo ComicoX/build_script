@@ -3,15 +3,10 @@
 
 # Function to Setup Global Parameters
 setup() {
-    # Server Specific compile settings
-    . ~/bin/compile.sh
-
     # Set build and directory parameters
     export BUILDd=~/havoc
 
-    export OUT_DIR_COMMON_BASE=home/shared/ComicoX
-    export zenout=$OUT_DIR_COMMON_BASE/havoc/target/product/I01WD
-    export rogout=$OUT_DIR_COMMON_BASE/havoc/target/product/I001D
+    export zenout=/home/shared/ComicoX/OUT_DIR/havoc/target/product/I002D
 
     cd $BUILDd
 
@@ -33,7 +28,7 @@ sync() {
     fi
 
     #Export the manifest url
-    export ROOMs=https://raw.githubusercontent.com/ComicoTeam/android_local_manifests_asus/master/local_manifests/local_manifests.xml
+    export ROOMs=https://raw.githubusercontent.com/ComicoTeam/android_local_manifests_asus/havoc-eleven/local_manifests/local_manifests.xml
 
     #Delete the existing manfiest
     rm -v $ROOMd/*.xml
@@ -47,28 +42,28 @@ sync() {
     #Reload the script at the end
 }
 
-# Function to BUILD ZENFONE 6 without gapps
+# Function to BUILD ZENFONE 7 without gapps
 zen() {
     #Announce the build
-    echo 'Zenfone 6'
+    echo 'Zenfone 7'
 
     #Start the build
-    brunch I01WD
+    brunch I002D
 
     #Cd to the build output
-    cd $zenout
+    #cd $zenout
     
     #Get the file name
-    filenameZen=$(basename *I01WD-Official*.zip)
+    #filenameZen=$(basename *I002D-Official*.zip)
 
     #Copy the file
-    mv $filenameZen $OUT_DIR_COMMON_BASE/$filenameZen
+    #mv $filenameZen $OUT_DIR_COMMON_BASE/$filenameZen
 
     #Make clean
-    make clean
+    #make clean DISABLE CLEANING FOR NOW AND UPLOADING
 
     #Upload the zip
-    gdrive upload $filenameZen
+    #gdrive upload $filenameZen
 
     #Exit the script
     exit 0
@@ -76,71 +71,38 @@ zen() {
 
 # Function to BUILD ZENFONE 6 with gapps
 zenGapps() {
-    echo 'Zenfone 6 GAPPS'
+    echo 'Zenfone 7 GAPPS'
     export WITH_GAPPS=true
     export TARGET_GAPPS_ARCH=arm64
-    brunch I01WD
-    cd $zenout
-    filenameZenG=$(basename *I01WD-Official-GApps*.zip)
-    mv $filenameZenG $OUT_DIR_COMMON_BASE/$filenameZenG
-    make clean
-    gdrive upload $filenameZenG
+    brunch I002D
+    #cd $zenout
+    #filenameZenG=$(basename *I01WD-Official-GApps*.zip)
+    #mv $filenameZenG $OUT_DIR_COMMON_BASE/$filenameZenG
+    #make clean
+    #gdrive upload $filenameZenG DISABLE CLEANING FOR NOW AND UPLOADING
     exit 0
 }
 
 # Function to BUILD ZENFONE 6 without gapps then with gapps
-zenFull() {
-    echo 'Zenfone 6 FULL'
-    brunch I01WD
-    cd $zenout
-    filenameZen=$(basename *I01WD-Official*.zip)
-    mv $filenameZen $OUT_DIR_COMMON_BASE/$filenameZen
-    make clean
-    sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameZen'
-    export WITH_GAPPS=true
-    export TARGET_GAPPS_ARCH=arm64
-    brunch I01WD
-    cd $zenout
-    filenameZenG=$(basename *I01WD-Official-GApps*.zip)
-    mv $filenameZenG $OUT_DIR_COMMON_BASE/$filenameZenG
-    make clean
-    sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameZenG'
-    exit 0
-}
+#zenFull() {
+#    echo 'Zenfone 7 FULL'
+#    brunch I01WD
+#    cd $zenout
+#    filenameZen=$(basename *I01WD-Official*.zip)
+#    mv $filenameZen $OUT_DIR_COMMON_BASE/$filenameZen
+#    make clean
+#    sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameZen'
+#    export WITH_GAPPS=true
+#    export TARGET_GAPPS_ARCH=arm64
+#    brunch I01WD
+#    cd $zenout
+#    filenameZenG=$(basename *I01WD-Official-GApps*.zip)
+#    mv $filenameZenG $OUT_DIR_COMMON_BASE/$filenameZenG
+#    make clean
+#    sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameZenG'
+#    exit 0
+#} DISABLED FOR NOW
 
-# Function to BUILD ROG PHONE II WITH GAPPS
-rogGapps() {
-    echo 'Rog PHONE II GAPPS'
-    export WITH_GAPPS=true
-    export TARGET_GAPPS_ARCH=arm64
-    brunch I001D
-    cd $rogout
-    filenameRogG=$(basename *I001D-Official-GApps*.zip)
-    mv $filenameRogG $OUT_DIR_COMMON_BASE/$filenameRogG
-    make clean
-    gdrive upload $filenameRogG
-    exit 0
-}
-
-# Function to BUILD RogPhone II without gapps then with gapps
-zenFull() {
-    echo 'Rog PHONE II FULL'
-    brunch I001D
-    cd $zenout
-    filenameRog=$(basename *I001D-Official*.zip)
-    mv $filenameRog $OUT_DIR_COMMON_BASE/$filenameRog
-    make clean
-    sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameRog'
-    export WITH_GAPPS=true
-    export TARGET_GAPPS_ARCH=arm64
-    brunch I001D
-    cd $zenout
-    filenameRogG=$(basename *I001D-Official-GApps*.zip)
-    mv $filenameRogG $OUT_DIR_COMMON_BASE/$filenameRogG
-    make clean
-    sshpass -p <PASSWORD> sftp <USER>@<url>:<pathToWhereOnServer> <<< $'put $filenameRogG'
-    exit 0
-}
 
 # Function to display menu options
 show_menus() {
@@ -149,12 +111,10 @@ show_menus() {
     echo " BUILD Menu"
     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     echo "  0. SYNC REPO"
-    echo "  1. Zenfone 6"
-    echo "  2. Zenfone 6 GAPPS"
-    echo "  3. Zenfone 6 FULL"
-    echo "  4. ROG PHONE II GAPPS"
-    echo "  5. ROG PHONE II FULL"
-    echo "  6. EXIT"
+    echo "  1. Zenfone 7"
+    echo "  2. Zenfone 7 GAPPS"
+    echo "  3. Zenfone 7 FULL"
+    echo "  9. EXIT"
     echo ""
 }
 
@@ -166,10 +126,7 @@ read_options(){
     0) sync;;
     1) zen;;
     2) zenGapps;;
-    3) zenFULL;;
-    4) rogGapps;;
-    5) rogFULL;;
-    6) exit 0;;
+    9) exit 0;;
     *) echo -e "${RED}Error...${STD}" && sleep 2
     esac
 }
